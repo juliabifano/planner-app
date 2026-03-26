@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TaskList from "../components/TaskList";
-import Calendar from "../components/Calendaralendar";
+import Calendar from "../components/Calendar";
 
 function Home() {
   const getToday = () => {
