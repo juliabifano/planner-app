@@ -5,7 +5,11 @@ import Calendar from "../components/Calendar";
 function Home() {
   const getToday = () => {
     const today = new Date();
-    const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const local = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
     return `${local.getFullYear()}-${String(local.getMonth() + 1).padStart(2, "0")}-${String(local.getDate()).padStart(2, "0")}`;
   };
 
@@ -32,7 +36,10 @@ function Home() {
 
   const formattedDate = new Date(selectedDate + "T00:00:00");
   const day = formattedDate.toLocaleDateString("pt-BR", { weekday: "long" });
-  const shortDate = formattedDate.toLocaleDateString("pt-BR", { day: "numeric", month: "short" });
+  const shortDate = formattedDate.toLocaleDateString("pt-BR", {
+    day: "numeric",
+    month: "short",
+  });
   const appDate = `${day.charAt(0).toUpperCase() + day.slice(1)} • ${shortDate}`;
 
   const getWeekTasks = () => {
@@ -45,7 +52,8 @@ function Home() {
     let total = 0;
     Object.keys(tasksByDate).forEach((date) => {
       const current = new Date(date + "T00:00:00");
-      if (current >= startOfWeek && current <= endOfWeek) total += tasksByDate[date].length;
+      if (current >= startOfWeek && current <= endOfWeek)
+        total += tasksByDate[date].length;
     });
 
     return total;
@@ -58,9 +66,8 @@ function Home() {
       className="page min-h-screen flex font-sans bg-cover bg-center"
       style={{ backgroundImage: "url('/background.jpg')" }}
     >
-
       <button
-        className="fixed top-4 left-4 z-50 md:hidden p-2 bg-white rounded shadow"
+        className="fixed top-4 left-4 z-50 md:hidden p-2 bg-white/80 dark:bg-white/80 rounded shadow"
         onClick={() => setIsOpen(!isOpen)}
       >
         ☰
@@ -74,12 +81,16 @@ function Home() {
       )}
 
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-md z-50 flex flex-col
-          transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          transition-transform duration-300 md:translate-x-0 md:static md:block`}
+        className={`fixed top-0 left-0 h-screen w-64 bg-white dark:bg-white md:bg-white/80 md:dark:bg-white/80 shadow-md z-50
+        transform ${isOpen ? " translate-x-0 " : "-translate-x-full"}
+        transition-transform duration-300 md:translate-x-0 `}
       >
         <div className="logo-completa flex justify-center mb-6 mt-6">
-          <img src="/logo-escura.png" alt="Logo" className="object-contain w-[200px] md:w-42" />
+          <img
+            src="/logo-escura.png"
+            alt="Logo"
+            className="object-contain w-[200px] md:w-42"
+          />
         </div>
 
         <div className="px-4 flex flex-col gap-2">
@@ -135,9 +146,13 @@ function Home() {
 
           {activeView === "dashboard" && (
             <div className="bg-white/70 dark:bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-md w-full text-center">
-              <p className="text-md text-gray-400 mb-3 tracking-wide pb-1">{appDate}</p>
+              <p className="text-md text-gray-400 mb-3 tracking-wide pb-1">
+                {appDate}
+              </p>
               <h2 className="text-2xl font-semibold mb-4">Resumo</h2>
-              <p className="text-gray-600 mb-2">📅 {weekTasks} tarefas esta semana</p>
+              <p className="text-gray-600 mb-2">
+                📅 {weekTasks} tarefas esta semana
+              </p>
               <p className="mb-2">🟣 {tasksToday.length} tarefas hoje</p>
               <p className="text-green-600">✔️ {completed} concluídas</p>
             </div>
