@@ -1,16 +1,38 @@
-# React + Vite
+# 📋 Planner App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação de gerenciamento de tarefas com calendário e organização diária.
 
-Currently, two official plugins are available:
+## 🚀 Funcionalidades
+- Criar e remover tarefas
+- Marcar como concluída
+- Organização por data
+- Visualização por "Hoje", Calendário e Dashboard
+- Adição de horário nas tarefas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Tecnologias
+- React
+- JavaScript
+- TailwindCSS
 
-## React Compiler
+## 💡 Objetivo
+Projeto desenvolvido para praticar React e evoluir na transição para a área de tecnologia.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📸 Preview
 
-## Expanding the ESLint configuration
+### Dashboard
+![preview 1](./public/preview1.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Calendário
+![preview 2](./public/preview2.png)
+
+### Tarefas de Hoje
+![preview 3](./public/preview3.png)
+
+## 🔗 Deploy
+-
+
+## ▶️ Como rodar
+```bash
+npm install
+npm run dev
+
