@@ -29,7 +29,7 @@ Projeto desenvolvido para praticar React e evoluir na transição para a área d
 ![preview 3](./public/preview3.png)
 
 ## 🔗 Deploy
--
+- https://planner-app-jb.vercel.app/
 
 ## ▶️ Como rodar
 ```bash
