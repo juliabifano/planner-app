@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
   const [input, setInput] = useState("");
@@ -67,7 +68,9 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
         className="w-full border rounded-lg p-2 text-center mb-3 text-gray-500"
       />
 
-      <button
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         className="w-full bg-[#6366f1] text-white p-2 text-base rounded-lg mb-4"
         onClick={() => {
           if (!input.trim()) return;
@@ -90,123 +93,132 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
         }}
       >
         Adicionar Tarefa
-      </button>
+      </motion.button>
 
       <div className="space-y-2">
-        {tasks.map((task) => {
-          const isObject = typeof task === "object";
-          const text = isObject ? task.text : task;
-          const completed = isObject ? task.completed : false;
+        <AnimatePresence mode="popLayout">
+          {tasks.map((task) => {
+            const isObject = typeof task === "object";
+            const text = isObject ? task.text : task;
+            const completed = isObject ? task.completed : false;
 
-          return (
-            <div
-              key={task.id}
-              className="bg-gray-100 p-3 text-base rounded-lg flex justify-between items-center"
-            >
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    const updatedTasks = rawTasks.map((t) => {
-                      if (t.id !== task.id) return t;
+            return (
+              <motion.div
+                key={task.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="bg-gray-100 p-3 text-base rounded-lg flex justify-between items-center"
+              >
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      const updatedTasks = rawTasks.map((t) => {
+                        if (t.id !== task.id) return t;
 
-                      return { ...t, completed: !t.completed };
-                    });
+                        return { ...t, completed: !t.completed };
+                      });
 
-                    setTasksByDate((prev) => ({
-                      ...prev,
-                      [selectedDate]: updatedTasks,
-                    }));
-                  }}
-                  className="text-lg"
-                >
-                  {completed ? "✔️" : "○"}
-                </button>
+                      setTasksByDate((prev) => ({
+                        ...prev,
+                        [selectedDate]: updatedTasks,
+                      }));
+                    }}
+                    className="text-lg"
+                  >
+                    {completed ? "✔️" : "○"}
+                  </button>
 
-                {editingId === task.id ? (
-                  <>
-                    <input
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      className="border rounded px-2 py-1"
-                    />
+                  {editingId === task.id ? (
+                    <>
+                      <input
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="border rounded px-2 py-1"
+                      />
 
-                    <button
-                      onClick={() => {
-                        const updatedTasks = rawTasks.map((t) => {
-                          if (t.id !== task.id) return t;
+                      <button
+                        onClick={() => {
+                          const updatedTasks = rawTasks.map((t) => {
+                            if (t.id !== task.id) return t;
 
-                          return { ...t, text: editText };
-                        });
+                            return { ...t, text: editText };
+                          });
 
-                        setTasksByDate((prev) => ({
-                          ...prev,
-                          [selectedDate]: updatedTasks,
-                        }));
+                          setTasksByDate((prev) => ({
+                            ...prev,
+                            [selectedDate]: updatedTasks,
+                          }));
 
-                        setEditingId(null);
-                        setEditText("");
+                          setEditingId(null);
+                          setEditText("");
+                        }}
+                        className="text-green-500 text-sm"
+                      >
+                        salvar
+                      </button>
+                    </>
+                  ) : (
+                    <motion.span
+                      animate={{
+                        opacity: completed ? 0.5 : 1,
+                        scale: completed ? 0.98 : 1,
                       }}
-                      className="text-green-500 text-sm"
+                      transition={{ duration: 0.2 }}
+                      className={`cursor-pointer ${
+                        completed ? "line-through text-gray-400" : ""
+                      }`}
                     >
-                      salvar
-                    </button>
-                  </>
-                ) : (
-                  <span
-                    onDoubleClick={() => {
+                      {showTime && (
+                        <span className="w-14 inline-block font-semibold text-gray-600 mr-2">
+                          {task.time || "--:--"}
+                        </span>
+                      )}
+                      {text}
+                    </motion.span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
                       setEditingId(task.id);
                       setEditText(text);
                     }}
-                    className={`cursor-pointer ${
-                      completed ? "line-through text-gray-400" : ""
-                    }`}
+                    className="text-purple-500 text-sm hover:text-purple-700 mr-[3px] transition"
                   >
-                    {showTime && (
-                      <span className="w-14 inline-block font-semibold text-gray-600 mr-2">
-                        {task.time || "--:--"}
-                      </span>
-                    )}
-                    {text}
-                  </span>
-                )}
-              </div>
+                    🖉
+                  </button>
+                  <button
+                    onClick={() => {
+                      const updatedTasks = rawTasks.filter(
+                        (t) => t.id !== task.id,
+                      );
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    setEditingId(task.id);
-                    setEditText(text);
-                  }}
-                  className="text-purple-500 text-sm hover:text-purple-700 mr-[3px] transition"
-                >
-                  🖉
-                </button>
-                <button
-                  onClick={() => {
-                    const updatedTasks = rawTasks.filter(
-                      (t) => t.id !== task.id,
-                    );
+                      setTasksByDate((prev) => {
+                        const newState = { ...prev };
 
-                    setTasksByDate((prev) => {
-                      const newState = { ...prev };
+                        if (updatedTasks.length === 0) {
+                          delete newState[selectedDate];
+                        } else {
+                          newState[selectedDate] = updatedTasks;
+                        }
 
-                      if (updatedTasks.length === 0) {
-                        delete newState[selectedDate];
-                      } else {
-                        newState[selectedDate] = updatedTasks;
-                      }
-
-                      return newState;
-                    });
-                  }}
-                  className="text-red-500 text-sm hover:text-red-700 transition"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          );
-        })}
+                        return newState;
+                      });
+                    }}
+                    className="text-red-500 text-sm hover:text-red-700 transition"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
   );
