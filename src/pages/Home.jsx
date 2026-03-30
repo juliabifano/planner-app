@@ -21,11 +21,6 @@ function Home() {
 
   const [tasksByDate, setTasksByDate] = useState(() => {
     const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : {};
-  });
-
-  const [tasksByDate, setTasksByDate] = useState(() => {
-    const saved = localStorage.getItem("tasks");
 
     if (!saved) return {};
 

@@ -98,13 +98,12 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
       <div className="space-y-2">
         <AnimatePresence mode="popLayout">
           {tasks.map((task) => {
-            const isObject = typeof task === "object";
-            const text = isObject ? task.text : task;
-            const completed = isObject ? task.completed : false;
+            const text = task.text;
+            const completed = task.completed;
 
             return (
               <motion.div
-                key={task.id || task}
+                key={task.id}
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -117,7 +116,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                   <button
                     onClick={() => {
                       const updatedTasks = rawTasks.map((t) => {
-                        if (t.id !== task.id || task) return t;
+                        if (t.id !== task.id) return t;
 
                         return { ...t, completed: !t.completed };
                       });
@@ -143,7 +142,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                       <button
                         onClick={() => {
                           const updatedTasks = rawTasks.map((t) => {
-                            if (t.id !== task.id || task) return t;
+                            if (t.id !== task.id) return t;
 
                             return { ...t, text: editText };
                           });
@@ -195,7 +194,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                   <button
                     onClick={() => {
                       const updatedTasks = rawTasks.filter(
-                        (t) => t.id !== task.id || task,
+                        (t) => t.id !== task.id,
                       );
 
                       setTasksByDate((prev) => {
