@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import TaskList from "../components/TaskList";
 import Calendar from "../components/Calendar";
 
@@ -22,6 +22,31 @@ function Home() {
   const [tasksByDate, setTasksByDate] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : {};
+  });
+
+  const [tasksByDate, setTasksByDate] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+
+    if (!saved) return {};
+
+    const parsed = JSON.parse(saved);
+
+    const normalized = {};
+
+    Object.keys(parsed).forEach((date) => {
+      normalized[date] = parsed[date].map((task) => {
+        if (typeof task === "object") return task;
+
+        return {
+          id: Date.now() + Math.random(),
+          text: task,
+          completed: false,
+          time: null,
+        };
+      });
+    });
+
+    return normalized;
   });
 
   useEffect(() => {
@@ -59,7 +84,9 @@ function Home() {
     return total;
   };
 
-  const weekTasks = getWeekTasks();
+  const weekTasks = useMemo(() => {
+    return getWeekTasks();
+  }, [tasksByDate, selectedDate]);
 
   return (
     <div
@@ -135,7 +162,7 @@ function Home() {
 
               <div className="bg-white/70 dark:bg-white/70 backdrop-blur-md p-6 text-base rounded-xl flex justify-between items-center shadow-sm hover:shadow-md transition w-full md:w-[450px]">
                 <TaskList
-                  selectedDate={getToday()}
+                  selectedDate={selectedDate}
                   tasksByDate={tasksByDate}
                   setTasksByDate={setTasksByDate}
                   showTime={false}
@@ -159,9 +186,9 @@ function Home() {
           )}
 
           {activeView === "today" && (
-            <div className="bg-white/70 dark:bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-md w-full text-center shadow-sm hover:shadow-md transition w-full">
+            <div className="bg-white/70 dark:bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-md text-center shadow-sm hover:shadow-md transition w-full">
               <TaskList
-                selectedDate={getToday()}
+                selectedDate={selectedDate}
                 tasksByDate={tasksByDate}
                 setTasksByDate={setTasksByDate}
                 showTime={true}

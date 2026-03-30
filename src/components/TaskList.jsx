@@ -104,7 +104,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
 
             return (
               <motion.div
-                key={task.id}
+                key={task.id || task}
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -117,7 +117,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                   <button
                     onClick={() => {
                       const updatedTasks = rawTasks.map((t) => {
-                        if (t.id !== task.id) return t;
+                        if (t.id !== task.id || task) return t;
 
                         return { ...t, completed: !t.completed };
                       });
@@ -143,7 +143,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                       <button
                         onClick={() => {
                           const updatedTasks = rawTasks.map((t) => {
-                            if (t.id !== task.id) return t;
+                            if (t.id !== task.id || task) return t;
 
                             return { ...t, text: editText };
                           });
@@ -195,7 +195,7 @@ function TaskList({ selectedDate, tasksByDate, setTasksByDate, showTime }) {
                   <button
                     onClick={() => {
                       const updatedTasks = rawTasks.filter(
-                        (t) => t.id !== task.id,
+                        (t) => t.id !== task.id || task,
                       );
 
                       setTasksByDate((prev) => {
